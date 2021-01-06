@@ -1,0 +1,53 @@
+name: "Summary Stats"
+description: "Import a csv file, run summary stats and export a svg D3 line chart"
+
+inputs:
+  csv-file:
+    required: true
+    description: "Input csv file"
+  output-file:
+    required: true
+    description: "Name of exported SVG"
+    default: "output.svg"
+  date-column:
+    required: true
+    description: "Date column"
+  value-column:
+    required: true
+    description: "Value column"
+  line-style:
+    required: true
+    description: "Line Style"
+    default: "fill: none; stroke: #ffab00; stroke-width: 2;"
+  width:
+    required: true
+    description: "width"
+    default: "600"
+  height:
+    required: true
+    description: "height"
+    default: "500"
+  top-margin:
+    required: true
+    description: "top margin"
+    default: "10"
+  bottom-margin:
+    required: true
+    description: "bottom margin"
+    default: "100"
+  left-margin:
+    required: true
+    description: "left margin"
+    default: "60"
+  right-margin:
+    required: true
+    description: "right margin"
+    default: "30"
+outputs:
+  summary-stats:
+    description: "Summary stats. An object with the data, range and outliers"
+  summary-alert:
+    description: "Summary alert. True of false depending on if last data point has outliers"
+runs:
+  using: "node12"
+  main: "dist/index.js"
