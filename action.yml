@@ -48,6 +48,8 @@ outputs:
     description: "Summary stats. An object with the data, range and outliers"
   summary-alert:
     description: "Summary alert. True of false depending on if last data point has outliers"
+  svg-output:
+    description: "File path to output file"
 runs:
   using: "node12"
   main: "dist/index.js"

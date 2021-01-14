@@ -105,6 +105,7 @@ async function run() {
         output.range = [r0, r1];
         output.outliers = (lastRecord.value < r0 || lastRecord.value > r1) ? [lastRecord.value] : []; 
         core.info(`Outliers found: ${output.outliers.length > 0}`);
+        core.setOutput("svg-output", outputFile)
         core.setOutput("summary-alert", output.outliers.length > 0)
         core.setOutput("summary-stats", output)
     } catch (error) {
