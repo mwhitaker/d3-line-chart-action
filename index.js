@@ -28,15 +28,19 @@ async function run() {
     try {
         const output = {}
         const csvFile = core.getInput("csv-file");
+        core.info(`Using csv file: ${csvFile}`);
         const outputFile = core.getInput("output-file");
         const lineStyle = core.getInput("line-style");
         const dateColumn = core.getInput("date-column");
+        core.info(`Date column: ${dateColumn}`);
         const valueColumn = core.getInput("value-column");
+        core.info(`Value column: ${valueColumn}`);
         const rrr = fs.readFileSync(csvFile, 'utf-8');
         const res = d3.csvParse(rrr, d => ({
             date: new Date(d[dateColumn]),
             value: +d[valueColumn],
         }));
+        core.info(`Number of rows: ${res.length}`);
         const lastRecord = res[res.length - 1]
         const timeformat = d3.timeFormat("%m/%d - %I %p");
         const x = d3.scaleTime()
@@ -97,6 +101,7 @@ async function run() {
                 .curve(d3.curveMonotoneX)
             );
         fs.writeFileSync(outputFile, body.html());
+        core.info(`Outliers found: ${output.outliers.length > 0}`);
         core.setOutput("summary-alert", output.outliers.length > 0)
         core.setOutput("summary-stats", output)
     } catch (error) {
