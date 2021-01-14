@@ -43,6 +43,7 @@ async function run() {
         }));
         core.info(`Number of rows: ${res.length}`);
         const lastRecord = res[res.length - 1]
+        core.info(`Last value: ${lastRecord.value}`);
         const timeformat = d3.timeFormat("%m/%d - %I %p");
         const x = d3.scaleTime()
             .domain(d3.extent(res, function (d) { return d.date; }))
@@ -60,7 +61,9 @@ async function run() {
         const q3 = d3.quantileSorted(sortedCounts, 0.75);
         const iqr = q3 - q1; // interquartile range
         const r0 = Math.max(min, q1 - iqr * 1.5);
+        core.info(`Lower bound r0: ${r0}`);
         const r1 = Math.min(max, q3 + iqr * 1.5);
+        core.info(`Upper bound r1: ${r1}`);
         output.data = res
         output.quartiles = [q1, q2, q3];
         output.range = [r0, r1];
