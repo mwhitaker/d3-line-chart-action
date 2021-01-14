@@ -42,8 +42,6 @@ async function run() {
             value: +d[valueColumn],
         }));
         core.info(`Number of rows: ${res.length}`);
-        const lastRecord = res.pop()
-        core.info(`Last value: ${lastRecord.value}`);
         const timeformat = d3.timeFormat("%m/%d - %I %p");
         const x = d3.scaleTime()
             .domain(d3.extent(res, function (d) { return d.date; }))
@@ -52,23 +50,6 @@ async function run() {
         const y = d3.scaleLinear()
             .domain([0, d3.max(res, function (d) { return +d.value; })])
             .range([height, 0]);
-
-        const sortedCounts = res.map(re => re.value).filter(d => d !== null && !isNaN(d)).sort(d3.ascending);
-        const min = sortedCounts[0];
-        const max = sortedCounts[sortedCounts.length - 1];
-        const q1 = d3.quantileSorted(sortedCounts, 0.25);
-        const q2 = d3.quantileSorted(sortedCounts, 0.50);
-        const q3 = d3.quantileSorted(sortedCounts, 0.75);
-        const iqr = q3 - q1; // interquartile range
-        const r0 = Math.max(min, q1 - iqr * 1.5);
-        core.info(`Lower bound r0: ${r0}`);
-        const r1 = Math.min(max, q3 + iqr * 1.5);
-        core.info(`Upper bound r1: ${r1}`);
-        output.data = res
-        output.quartiles = [q1, q2, q3];
-        output.range = [r0, r1];
-        output.outliers = (lastRecord.value < r0 || lastRecord.value > r1) ? [lastRecord.value] : []; 
-
         const bottomA = svg.append("g")
             .attr("transform", "translate(0," + height + ")")
         bottomA.call(d3.axisBottom(x).tickFormat(timeformat)).selectAll("line,path").style("stroke", "black")
@@ -105,6 +86,24 @@ async function run() {
                 .curve(d3.curveMonotoneX)
             );
         fs.writeFileSync(outputFile, body.html());
+        // summary stats
+        const lastRecord = res.pop()
+        core.info(`Last value: ${lastRecord.value}`);
+        const sortedCounts = res.map(re => re.value).filter(d => d !== null && !isNaN(d)).sort(d3.ascending);
+        const min = sortedCounts[0];
+        const max = sortedCounts[sortedCounts.length - 1];
+        const q1 = d3.quantileSorted(sortedCounts, 0.25);
+        const q2 = d3.quantileSorted(sortedCounts, 0.50);
+        const q3 = d3.quantileSorted(sortedCounts, 0.75);
+        const iqr = q3 - q1; // interquartile range
+        const r0 = Math.max(min, q1 - iqr * 1.5);
+        core.info(`Lower bound r0: ${r0}`);
+        const r1 = Math.min(max, q3 + iqr * 1.5);
+        core.info(`Upper bound r1: ${r1}`);
+        output.data = res
+        output.quartiles = [q1, q2, q3];
+        output.range = [r0, r1];
+        output.outliers = (lastRecord.value < r0 || lastRecord.value > r1) ? [lastRecord.value] : []; 
         core.info(`Outliers found: ${output.outliers.length > 0}`);
         core.setOutput("summary-alert", output.outliers.length > 0)
         core.setOutput("summary-stats", output)
