@@ -42,7 +42,7 @@ async function run() {
             value: +d[valueColumn],
         }));
         core.info(`Number of rows: ${res.length}`);
-        const lastRecord = res[res.length - 1]
+        const lastRecord = res.pop()
         core.info(`Last value: ${lastRecord.value}`);
         const timeformat = d3.timeFormat("%m/%d - %I %p");
         const x = d3.scaleTime()
