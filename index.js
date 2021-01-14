@@ -30,6 +30,7 @@ async function run() {
         const csvFile = core.getInput("csv-file");
         core.info(`Using csv file: ${csvFile}`);
         const outputFile = core.getInput("output-file");
+        core.info(`Wrting chart to: ${outputFile}`);
         const lineStyle = core.getInput("line-style");
         const dateColumn = core.getInput("date-column");
         core.info(`Date column: ${dateColumn}`);
