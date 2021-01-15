@@ -41,6 +41,7 @@ async function run() {
             date: new Date(d[dateColumn]),
             value: +d[valueColumn],
         }));
+        const fullData = [...res]
         core.info(`Number of rows: ${res.length}`);
         const timeformat = d3.timeFormat("%m/%d - %I %p");
         const x = d3.scaleTime()
@@ -86,6 +87,7 @@ async function run() {
                 .curve(d3.curveMonotoneX)
             );
         fs.writeFileSync(outputFile, body.html());
+        core.info(`Writing chart to: ${outputFile}`);
         // summary stats
         const lastRecord = res.pop()
         core.info(`Last value: ${lastRecord.value}`);
@@ -100,7 +102,7 @@ async function run() {
         core.info(`Lower bound r0: ${r0}`);
         const r1 = Math.min(max, q3 + iqr * 1.5);
         core.info(`Upper bound r1: ${r1}`);
-        output.data = res
+        output.data = fullData;
         output.quartiles = [q1, q2, q3];
         output.range = [r0, r1];
         output.outliers = (lastRecord.value < r0 || lastRecord.value > r1) ? [lastRecord.value] : []; 
