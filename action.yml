@@ -47,7 +47,7 @@ outputs:
   summary-stats:
     description: "Summary stats. An object with the data, range and outliers"
   summary-alert:
-    description: "Summary alert. True of false depending on if last data point has outliers"
+    description: "Summary alert. True of false depending on whether last data point is an outlier"
   svg-output:
     description: "File path to output file"
 runs:

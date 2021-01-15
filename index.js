@@ -6,7 +6,7 @@ const fs = require("fs");
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
-const dom = new JSDOM(`<!DOCTYPE html><head><style>svg { background: white }</style></head><body></body>`);
+const dom = new JSDOM(`<!DOCTYPE html><body></body>`);
 let body = d3.select(dom.window.document.querySelector("body"))
 
 const margin = { top: parseInt(core.getInput("top-margin")), right: parseInt(core.getInput("right-margin")), bottom: parseInt(core.getInput("bottom-margin")), left: parseInt(core.getInput("left-margin")) },
