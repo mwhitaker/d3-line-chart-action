@@ -65,10 +65,10 @@ async function run() {
 
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", "-4.0em")
+            .attr("y", "-2.0em")
             .attr("dy", "-0.1em")
             .attr("text-anchor", "end")
-            .attr("stroke", "black")
+            .attr("fill", "black")
             .text(valueColumn);
         // svg.append("text")
         //      .attr("y", height + 50)
