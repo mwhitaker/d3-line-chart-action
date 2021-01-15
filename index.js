@@ -6,7 +6,7 @@ const fs = require("fs");
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
-const dom = new JSDOM(`<!DOCTYPE html><body></body>`);
+const dom = new JSDOM(`<!DOCTYPE html><head><style>svg { background: white }</style></head><body></body>`);
 let body = d3.select(dom.window.document.querySelector("body"))
 
 const margin = { top: parseInt(core.getInput("top-margin")), right: parseInt(core.getInput("right-margin")), bottom: parseInt(core.getInput("bottom-margin")), left: parseInt(core.getInput("left-margin")) },
@@ -18,8 +18,6 @@ let svg = body
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .attr('xmlns', 'http://www.w3.org/2000/svg')
-    .style("opacity", 1.0)
-    .style("fill", "white")
     .append("g")
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
@@ -30,7 +28,6 @@ async function run() {
         const csvFile = core.getInput("csv-file");
         core.info(`Using csv file: ${csvFile}`);
         const outputFile = core.getInput("output-file");
-        core.info(`Wrting chart to: ${outputFile}`);
         const lineStyle = core.getInput("line-style");
         const dateColumn = core.getInput("date-column");
         core.info(`Date column: ${dateColumn}`);
